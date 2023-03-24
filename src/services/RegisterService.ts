@@ -13,6 +13,7 @@ export class RegisterService {
   constructor(private usersRepository: IUsersRepository) {}
 
   async execute({ name, email, password }: IRegisterService) {
+    console.log('inside service', name, email, password);
     const password_hash = await hash(password, 6);
 
     const emailIsAlreadyRegistered = await this.usersRepository.findByEmail(
@@ -23,6 +24,14 @@ export class RegisterService {
       throw new EmailAlreadyExistsError();
     }
 
-    await this.usersRepository.create({ name, email, password_hash });
+    const user = await this.usersRepository.create({
+      name,
+      email,
+      password_hash,
+    });
+
+    return {
+      user,
+    };
   }
 }

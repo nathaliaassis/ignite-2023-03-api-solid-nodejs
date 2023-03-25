@@ -7,7 +7,7 @@ import { EmailAlreadyExistsError } from './errors/EmailAlreadyExistsError';
 let usersRepository: InMemoryUsersRepository;
 let registerService: RegisterService;
 
-describe('@Users:', () => {
+describe('@Register Service:', () => {
   beforeEach(() => {
     usersRepository = new InMemoryUsersRepository();
     registerService = new RegisterService(usersRepository);

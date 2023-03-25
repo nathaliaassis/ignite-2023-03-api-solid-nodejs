@@ -3,21 +3,20 @@ import { beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { AuthenticationService } from './AuthenticationService';
 import { RegisterService } from './RegisterService';
 import { InvalidCredentialsError } from './errors/InvalidCredentialsError';
+import { hash } from 'bcryptjs';
 
 let usersRepository: InMemoryUsersRepository;
 let authenticationService: AuthenticationService;
-let registerService: RegisterService;
 
 describe('@Authentication: ', () => {
   beforeEach(async () => {
     usersRepository = new InMemoryUsersRepository();
     authenticationService = new AuthenticationService(usersRepository);
-    registerService = new RegisterService(usersRepository);
 
-    await registerService.execute({
+    await usersRepository.create({
       name: 'John Doe',
       email: 'johndoe@example.com',
-      password: '123456',
+      password_hash: await hash('123456', 6),
     });
   });
 

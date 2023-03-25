@@ -1,5 +1,5 @@
 import { CheckIn } from '@prisma/client';
-import { ICheckInsRepository } from '@/repositories/prisma/interfaces/ICheckinsRepository';
+import { ICheckInsRepository } from '@/repositories/prisma/interfaces/ICheckInsRepository';
 
 interface ICheckInServiceRequest {
   userId: string;
@@ -17,6 +17,15 @@ export class CheckInService {
     userId,
     gymId,
   }: ICheckInServiceRequest): Promise<ICheckInServiceResponse> {
+    const checkInOnSameDate = await this.checkInsRepository.findByUserIdOnDate(
+      userId,
+      new Date(),
+    );
+
+    if (checkInOnSameDate) {
+      throw new Error();
+    }
+
     const checkIn = await this.checkInsRepository.create({
       gym_id: gymId,
       user_id: userId,

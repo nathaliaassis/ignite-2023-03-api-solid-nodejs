@@ -4,6 +4,14 @@ import { IUsersRepository } from '../prisma/interfaces/IUsersRespository';
 export class InMemoryUsersRepository implements IUsersRepository {
   public items: User[] = [];
 
+  async findById(id: string): Promise<User | null> {
+    const user = this.items.find((item) => item.id === id);
+
+    if (!user) return null;
+
+    return user;
+  }
+
   async create(data: Prisma.UserCreateInput) {
     const user: User = {
       id: 'user-1',

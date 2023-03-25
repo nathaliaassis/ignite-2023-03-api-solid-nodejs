@@ -13,7 +13,6 @@ export class RegisterService {
   constructor(private usersRepository: IUsersRepository) {}
 
   async execute({ name, email, password }: IRegisterService) {
-    console.log('inside service', name, email, password);
     const password_hash = await hash(password, 6);
 
     const emailIsAlreadyRegistered = await this.usersRepository.findByEmail(

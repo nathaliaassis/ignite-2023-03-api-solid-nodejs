@@ -3,6 +3,8 @@ import { ICheckInsRepository } from '@/repositories/prisma/interfaces/ICheckInsR
 import { IGymsRepository } from '@/repositories/prisma/interfaces/IGymsRepository';
 import { ResourceNotFoundError } from './errors/ResourceNotFoundError';
 import { getDistanceBetweenCoordinates } from 'utils/getDistanceBetweenCoordinates';
+import { MaxDistanceError } from './errors/MaxDistanceError';
+import { MaxNumberOfCheckInsError } from './errors/MaxNumberOfCheckInsError';
 
 interface ICheckInServiceRequest {
   userId: string;
@@ -50,7 +52,7 @@ export class CheckInService {
 
     const MAX_DISTANCE_IN_KILOMETERS = 0.1;
     if (distance > MAX_DISTANCE_IN_KILOMETERS) {
-      throw new Error();
+      throw new MaxDistanceError();
     }
     // if gym exists we need to calculate the distanve between user and gym
     // if distance > 100M we need to throw an error
@@ -61,7 +63,7 @@ export class CheckInService {
     );
 
     if (checkInOnSameDate) {
-      throw new Error();
+      throw new MaxNumberOfCheckInsError();
     }
 
     const checkIn = await this.checkInsRepository.create({

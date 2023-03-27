@@ -7,7 +7,7 @@ import { ResourceNotFoundError } from './errors/ResourceNotFoundError';
 let usersRepository: InMemoryUsersRepository;
 let getUserProfileService: GetUserProfileService;
 
-describe('@Profile Service: ', () => {
+describe('@Get User Profile Service: ', () => {
   beforeEach(async () => {
     usersRepository = new InMemoryUsersRepository();
     getUserProfileService = new GetUserProfileService(usersRepository);

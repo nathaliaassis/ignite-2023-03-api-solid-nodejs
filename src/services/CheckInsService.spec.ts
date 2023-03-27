@@ -1,16 +1,29 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { CheckInService } from './CheckInService';
+import { CheckInService } from './CheckInsService';
 import { InMemoryCheckInsRepository } from '@/repositories/in-memory/InMemoryCheckInsRepository';
+import { InMemoryGymsRepository } from '@/repositories/in-memory/InMemoryGymsRepository';
+import { Decimal } from '@prisma/client/runtime/library';
 
 let checkInsRepository: InMemoryCheckInsRepository;
+let gymsRepository: InMemoryGymsRepository;
 let checkInService: CheckInService;
 
 describe('@Check In Service: ', () => {
   beforeEach(async () => {
     checkInsRepository = new InMemoryCheckInsRepository();
-    checkInService = new CheckInService(checkInsRepository);
+    gymsRepository = new InMemoryGymsRepository();
+    checkInService = new CheckInService(checkInsRepository, gymsRepository);
 
     vi.useFakeTimers();
+
+    gymsRepository.items.push({
+      id: 'gym-01',
+      title: 'TS Gym',
+      description: '',
+      phone: '',
+      latitude: new Decimal(-15.618263),
+      longitude: new Decimal(-47.660239),
+    });
   });
 
   afterEach(() => {
@@ -21,6 +34,8 @@ describe('@Check In Service: ', () => {
     const { checkIn } = await checkInService.execute({
       gymId: 'gym-01',
       userId: 'user-01',
+      userLatitude: -15.618263,
+      userLongitude: -47.660239,
     });
 
     expect(checkIn.id).toEqual(expect.any(String));
@@ -31,12 +46,16 @@ describe('@Check In Service: ', () => {
     await checkInService.execute({
       gymId: 'gym-01',
       userId: 'user-01',
+      userLatitude: -15.618263,
+      userLongitude: -47.660239,
     });
 
     await expect(() =>
       checkInService.execute({
         gymId: 'gym-01',
         userId: 'user-01',
+        userLatitude: -15.618263,
+        userLongitude: -47.660239,
       }),
     ).rejects.toBeInstanceOf(Error);
   });
@@ -46,6 +65,8 @@ describe('@Check In Service: ', () => {
     await checkInService.execute({
       gymId: 'gym-01',
       userId: 'user-01',
+      userLatitude: -15.618263,
+      userLongitude: -47.660239,
     });
 
     vi.setSystemTime(new Date(2023, 2, 21, 8, 0, 0));
@@ -53,8 +74,31 @@ describe('@Check In Service: ', () => {
     const { checkIn } = await checkInService.execute({
       gymId: 'gym-01',
       userId: 'user-01',
+      userLatitude: -15.618263,
+      userLongitude: -47.660239,
     });
 
     expect(checkIn.id).toEqual(expect.any(String));
+  });
+
+  it('should not be able to check in distant gym', async () => {
+    //creating a new gym
+    gymsRepository.items.push({
+      id: 'gym-02',
+      title: 'TS Gym',
+      description: '',
+      phone: '',
+      latitude: new Decimal(-15.6557633),
+      longitude: new Decimal(-47.7933586),
+    });
+
+    await expect(() =>
+      checkInService.execute({
+        gymId: 'gym-02',
+        userId: 'user-01',
+        userLatitude: -15.618263,
+        userLongitude: -47.660239,
+      }),
+    ).rejects.toBeInstanceOf(Error);
   });
 });

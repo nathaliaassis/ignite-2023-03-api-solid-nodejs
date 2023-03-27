@@ -4,6 +4,16 @@
 
 API developed during Rocketseat backend online course
 
+## Technologies
+
+- Node
+- Typescript | TSUP | TSX
+- Fastify
+- Docker
+- Prisma
+- Zod
+- Vitest
+
 ## Commands
 
 ### Start server in DEVELOPMENT:
@@ -59,16 +69,6 @@ npm run prisma
 ```bash
 npm run prisma:studio
 ```
-
-## Technologies
-
-- Node
-- Typescript | TSUP | TSX
-- Fastify
-- Docker
-- Prisma
-- Zod
-- Vitest
 
 ## Config for Tests
 

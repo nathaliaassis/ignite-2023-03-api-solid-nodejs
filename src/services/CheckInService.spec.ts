@@ -5,6 +5,7 @@ import { InMemoryGymsRepository } from '@/repositories/in-memory/InMemoryGymsRep
 import { Decimal } from '@prisma/client/runtime/library';
 import { MaxDistanceError } from './errors/MaxDistanceError';
 import { MaxNumberOfCheckInsError } from './errors/MaxNumberOfCheckInsError';
+import { ResourceNotFoundError } from './errors/ResourceNotFoundError';
 
 let checkInsRepository: InMemoryCheckInsRepository;
 let gymsRepository: InMemoryGymsRepository;
@@ -41,6 +42,18 @@ describe('@Check In Service: ', () => {
     });
 
     expect(checkIn.id).toEqual(expect.any(String));
+  });
+
+  it('should nreturn an erro if gym does not exist', async () => {
+    vi.setSystemTime(new Date(2023, 2, 25, 8, 0, 0));
+    await expect(() =>
+      checkInService.execute({
+        gymId: 'non-existent-gym',
+        userId: 'user-01',
+        userLatitude: -15.618263,
+        userLongitude: -47.660239,
+      }),
+    ).rejects.toBeInstanceOf(ResourceNotFoundError);
   });
 
   it('should not be able to check in twice in the same day', async () => {

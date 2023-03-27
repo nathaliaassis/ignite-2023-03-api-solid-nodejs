@@ -4,20 +4,20 @@ import { compare } from 'bcryptjs';
 import { User } from '@prisma/client';
 import { ResourceNotFoundError } from './errors/ResourceNotFoundError';
 
-interface IProfileServiceRequest {
+interface IGetUserProfileServiceRequest {
   userId: string;
 }
 
-interface IProfileServiceRespose {
+interface IGetUserProfileServiceResponse {
   user: User;
 }
 
-export class ProfileService {
+export class GetUserProfileService {
   constructor(private usersRepository: IUsersRepository) {}
 
   async execute({
     userId,
-  }: IProfileServiceRequest): Promise<IProfileServiceRespose> {
+  }: IGetUserProfileServiceRequest): Promise<IGetUserProfileServiceResponse> {
     const user = await this.usersRepository.findById(userId);
 
     if (!user) {

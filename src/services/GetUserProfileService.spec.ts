@@ -1,18 +1,16 @@
 import { InMemoryUsersRepository } from '@/repositories/in-memory/InMemoryUsersRepository';
 import { beforeEach, describe, expect, it } from 'vitest';
-import { AuthenticationService } from './AuthenticationService';
-import { InvalidCredentialsError } from './errors/InvalidCredentialsError';
 import { hash } from 'bcryptjs';
-import { ProfileService } from './ProfileService';
+import { GetUserProfileService } from './GetUserProfileService';
 import { ResourceNotFoundError } from './errors/ResourceNotFoundError';
 
 let usersRepository: InMemoryUsersRepository;
-let profileService: ProfileService;
+let getUserProfileService: GetUserProfileService;
 
 describe('@Profile Service: ', () => {
   beforeEach(async () => {
     usersRepository = new InMemoryUsersRepository();
-    profileService = new ProfileService(usersRepository);
+    getUserProfileService = new GetUserProfileService(usersRepository);
   });
 
   it('should be able to get user profile', async () => {
@@ -22,7 +20,7 @@ describe('@Profile Service: ', () => {
       password_hash: await hash('123456', 6),
     });
 
-    const { user } = await profileService.execute({
+    const { user } = await getUserProfileService.execute({
       userId: createdUser.id,
     });
 
@@ -30,7 +28,7 @@ describe('@Profile Service: ', () => {
   });
 
   it('should not be able to get user profile of a non existent id', async () => {
-    const profileGet = profileService.execute({
+    const profileGet = getUserProfileService.execute({
       userId: 'non-existent-id',
     });
 

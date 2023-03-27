@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { CheckInService } from './CheckInsService';
+import { CheckInService } from './CheckInService';
 import { InMemoryCheckInsRepository } from '@/repositories/in-memory/InMemoryCheckInsRepository';
 import { InMemoryGymsRepository } from '@/repositories/in-memory/InMemoryGymsRepository';
 import { Decimal } from '@prisma/client/runtime/library';

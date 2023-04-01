@@ -7,6 +7,6 @@ export interface IFindManyNearby {
 export interface IGymsRepository {
   create(data: Prisma.GymCreateInput): Promise<Gym>;
   findManyNearby(params: IFindManyNearby): Promise<Gym[]>;
-  searchMany(querty: string, page: number): Promise<Gym[]>;
+  searchMany(query: string, page: number): Promise<Gym[]>;
   findById(id: string): Promise<Gym | null>;
 }

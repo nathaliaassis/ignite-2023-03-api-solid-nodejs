@@ -12,7 +12,7 @@ API developed during Rocketseat backend online course
 - Docker
 - Prisma
 - Zod
-- Vitest
+- Vitest¨
 
 ## Commands
 

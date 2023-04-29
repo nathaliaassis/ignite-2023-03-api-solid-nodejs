@@ -1,12 +1,15 @@
 import fastify from 'fastify';
 import { ZodError, z } from 'zod';
-import { prisma } from './lib/prisma';
 import { routes } from './http/routes';
 import { env } from './env';
+import fastifyJwt from '@fastify/jwt';
 
 export const app = fastify();
 
 app.register(routes);
+app.register(fastifyJwt, {
+  secret: env.JWT_SECRET,
+});
 
 app.setErrorHandler((error, _, reply) => {
   if (error instanceof ZodError) {
